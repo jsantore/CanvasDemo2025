@@ -1,5 +1,6 @@
 package bsu.comp152.canvasdemo2025;
 
+import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -22,14 +23,29 @@ import static javafx.scene.input.KeyCode.RIGHT;
 
 public class HelloApplication extends Application {
     private Image ship;
+    private TreasureChest goal;
     private int xLoc;
     private int yLoc;
     private int deltaX;
 
+    private class TreasureChest{
+        private int xLoc;
+        private int yLoc;
+        private Image pict;
+        private int move;
+        public TreasureChest(int xLoc, int yLoc){
+            this.xLoc = xLoc;
+            this.yLoc = yLoc;
+            move = 2;
+            var treasurePath = getClass().getResource("Chest2.png");
+            this.pict = new Image(treasurePath.toString());
+        }
+    }
     @Override
     public void start(Stage primaryStage) {
         var path = getClass().getResource("galleon.png");
         ship = new Image(path.toString());
+        goal = new TreasureChest(400, 400);
         Canvas drawingArea = new Canvas(800,800);
         GraphicsContext drawer = drawingArea.getGraphicsContext2D();
         var backgroundColor = Paint.valueOf("lightblue");
@@ -38,6 +54,7 @@ public class HelloApplication extends Application {
         xLoc = 200;
         yLoc = 100;
         drawer.drawImage(ship, xLoc,yLoc);
+        drawer.drawImage(goal.pict, goal.xLoc, goal.yLoc);
         VBox organizer = new VBox();
         Button Quit = new Button("Quit");
         EventHandler<ActionEvent> buttonResponder = new EventHandler<ActionEvent>() {
@@ -50,6 +67,7 @@ public class HelloApplication extends Application {
         organizer.getChildren().add(Quit);
         organizer.getChildren().add(drawingArea);
         Scene windowContents = new Scene(organizer);
+        organizer.setFocusTraversable(true);
         windowContents.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
@@ -65,6 +83,34 @@ public class HelloApplication extends Application {
                 event.consume();
             }
         });
+        windowContents.setOnKeyReleased(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent keyEvent) {
+                if(keyEvent.getCode() == LEFT || keyEvent.getCode() == KeyCode.NUMPAD4 ||
+                keyEvent.getCode() == RIGHT || keyEvent.getCode() == KeyCode.NUMPAD6) {
+                    deltaX =0;
+                }
+            }
+        });
+        var animator = new AnimationTimer() {
+            @Override
+            public void handle(long currentTime) {
+                var backgroundColor = Paint.valueOf("lightblue");
+                drawer.setFill(backgroundColor);
+                drawer.fillRect(0,0,800,800);
+                xLoc += deltaX;
+                GraphicsContext drawer = drawingArea.getGraphicsContext2D();
+                drawer.drawImage(ship, xLoc,yLoc);
+                if(goal.xLoc > 800){
+                    goal.move = -goal.move;
+                }
+                goal.xLoc += goal.move;
+                drawer.drawImage(goal.pict, goal.xLoc,goal.yLoc);
+
+            }
+
+        };
+        animator.start();
         primaryStage.setScene(windowContents);
         primaryStage.show();
     }
