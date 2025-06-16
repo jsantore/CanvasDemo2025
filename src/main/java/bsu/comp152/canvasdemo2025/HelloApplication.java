@@ -101,7 +101,7 @@ public class HelloApplication extends Application {
                 xLoc += deltaX;
                 GraphicsContext drawer = drawingArea.getGraphicsContext2D();
                 drawer.drawImage(ship, xLoc,yLoc);
-                if(goal.xLoc > 800){
+                if(goal.xLoc > 800-39||goal.xLoc < 0){
                     goal.move = -goal.move;
                 }
                 goal.xLoc += goal.move;
