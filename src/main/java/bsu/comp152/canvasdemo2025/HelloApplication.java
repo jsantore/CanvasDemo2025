@@ -8,12 +8,17 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 
 
 import java.io.IOException;
+
+import static javafx.scene.input.KeyCode.LEFT;
+import static javafx.scene.input.KeyCode.RIGHT;
 
 public class HelloApplication extends Application {
     private Image ship;
@@ -45,6 +50,21 @@ public class HelloApplication extends Application {
         organizer.getChildren().add(Quit);
         organizer.getChildren().add(drawingArea);
         Scene windowContents = new Scene(organizer);
+        windowContents.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                System.out.println(event.getCode().toString());
+                if (event.getCode() == LEFT || event.getCode() == KeyCode.NUMPAD4) {
+                    System.out.println("LEFT!!");
+                    deltaX = -2;
+                }
+                else if (event.getCode() == RIGHT || event.getCode() == KeyCode.NUMPAD6) {
+                    System.out.println("RIGHT!!!");
+                    deltaX = 2;
+                }
+                event.consume();
+            }
+        });
         primaryStage.setScene(windowContents);
         primaryStage.show();
     }
