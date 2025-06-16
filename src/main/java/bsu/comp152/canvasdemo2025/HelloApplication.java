@@ -9,6 +9,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 
 
@@ -26,8 +27,11 @@ public class HelloApplication extends Application {
         ship = new Image(path.toString());
         Canvas drawingArea = new Canvas(800,800);
         GraphicsContext drawer = drawingArea.getGraphicsContext2D();
+        var backgroundColor = Paint.valueOf("lightblue");
+        drawer.setFill(backgroundColor);
+        drawer.fillRect(0,0,800,800);
         xLoc = 200;
-        yLoc = 300;
+        yLoc = 100;
         drawer.drawImage(ship, xLoc,yLoc);
         VBox organizer = new VBox();
         Button Quit = new Button("Quit");
