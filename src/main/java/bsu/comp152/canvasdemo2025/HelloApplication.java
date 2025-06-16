@@ -57,6 +57,7 @@ public class HelloApplication extends Application {
         drawer.drawImage(goal.pict, goal.xLoc, goal.yLoc);
         VBox organizer = new VBox();
         Button Quit = new Button("Quit");
+        Quit.setFocusTraversable(false);
         EventHandler<ActionEvent> buttonResponder = new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event){
